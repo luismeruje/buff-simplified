@@ -6,12 +6,12 @@ use std::ops::Sub;
 use num::FromPrimitive;
 use std::ops::Div;
 use std::ops::Add;
-use crate::bincode;
+use bincode;
 use serde::{Serialize, Deserialize};
 
-use rustfft::{FFTplanner,FFTnum};
-use rustfft::num_complex::Complex;
-use rustfft::num_traits::Zero;
+// use rustfft::{FFTplanner,FFTnum};
+// use rustfft::num_complex::Complex;
+// use rustfft::num_traits::Zero;
 
 use std::time::{Duration};
 use num::Num;
@@ -32,6 +32,7 @@ pub type DictionaryId = u32; /* Type alias for dictionary id */
 const DEFAULT_BATCH_SIZE: usize = 50;
 
 #[derive(Clone,Serialize,Deserialize,Debug,PartialEq)]
+#[repr(C)]
 pub struct Segment<T> {
 	method: Option<Methods>,
 	timestamp: SystemTime,
@@ -43,7 +44,7 @@ pub struct Segment<T> {
 }
 
 impl<T> Segment<T> {
-	pub fn new(method: Option<Methods>, timestamp: SystemTime, signal: SignalId,
+	pub fn new_segment(method: Option<Methods>, timestamp: SystemTime, signal: SignalId,
 	    data: Vec<T>, time_lapse: Option<Vec<Duration>>, next_seg_offset: Option<Duration>) -> Segment<T> {
 		
 		Segment {
@@ -262,7 +263,7 @@ impl<'a,T> ComplexDef<T>
 	pub fn convert_from_bytes(bytes: &'a [u8]) -> Result<Segment<Complex<T>>,()> {
 		let deserialized_data: Result<Segment<ComplexDef<T>>,_> = bincode::deserialize(bytes);
 		match deserialized_data {
-			Ok(seg) => Ok(Segment::new(seg.method,seg.timestamp,seg.signal,
+			Ok(seg) => Ok(Segment::new_segment(seg.method,seg.timestamp,seg.signal,
 						seg.data.iter().map(|x| ComplexDef::to_complex(x)).collect(),
 						seg.time_lapse,seg.prev_seg_offset)),
 			Err(e)  => {
@@ -274,7 +275,7 @@ impl<'a,T> ComplexDef<T>
 
 	pub fn convert_to_bytes(seg: &Segment<Complex<T>>) -> Result<Vec<u8>,()> {
 		let persitable_data: Segment<ComplexDef<T>> = 
-			Segment::new(
+			Segment::new_segment(
 				seg.method.clone(), seg.timestamp, seg.signal,
 				seg.data.iter().map(|x| ComplexDef::from_complex(x)).collect(),
 				seg.time_lapse.clone(), seg.prev_seg_offset

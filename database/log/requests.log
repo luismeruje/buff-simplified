@@ -1,0 +1,33 @@
+2025-04-10T15:34:46.479769+01:00 - input args["target/debug/comp_profiler"]
+2025-04-10T15:35:59.050478+01:00 - input args["./target/debug/comp_profiler", "10", "buff", "10"]
+2025-04-10T15:36:19.801986+01:00 - input args["./target/debug/comp_profiler", "10", "buff", "10", "10"]
+2025-04-10T15:36:19.802385+01:00 - original size:800
+2025-04-10T15:36:19.802405+01:00 - compressed size:120
+2025-04-10T15:37:08.696561+01:00 - input args["./target/debug/comp_profiler", "10", "buff", "10", "10"]
+2025-04-10T15:37:08.698651+01:00 - original size:800
+2025-04-10T15:37:08.698664+01:00 - compressed size:120
+2025-04-10T15:37:47.982138+01:00 - input args["./target/debug/comp_profiler", "10", "buff", "10", "10"]
+2025-04-10T15:37:47.982996+01:00 - original size:800
+2025-04-10T15:37:47.983012+01:00 - compressed size:120
+2025-04-10T15:37:55.624558+01:00 - input args["./target/debug/comp_profiler", "10", "buff", "10", "10"]
+2025-04-10T15:37:55.626273+01:00 - original size:800
+2025-04-10T15:37:55.626292+01:00 - compressed size:120
+2025-04-10T15:49:39.446930+01:00 - input args["./target/debug/comp_profiler", "10", "buff", "10", "10"]
+2025-04-10T15:49:39.448123+01:00 - original size:800
+2025-04-10T15:49:39.448146+01:00 - compressed size:120
+2025-04-10T15:49:49.193313+01:00 - input args["target/debug/comp_profiler"]
+2025-04-10T15:50:00.765036+01:00 - input args["target/debug/comp_profiler", "10", "buff", "10", "10"]
+2025-04-10T15:50:00.795353+01:00 - original size:800000
+2025-04-10T15:50:00.795401+01:00 - compressed size:100020
+2025-04-10T15:50:56.541014+01:00 - input args["target/debug/comp_profiler", "10", "buff", "10", "10"]
+2025-04-10T15:50:56.575104+01:00 - original size:800000
+2025-04-10T15:50:56.575183+01:00 - compressed size:100020
+2025-04-10T15:52:26.756911+01:00 - input args["target/debug/comp_profiler", "10", "buff", "10", "10"]
+2025-04-10T15:52:26.788282+01:00 - original size:800000
+2025-04-10T15:52:26.788332+01:00 - compressed size:100020
+2025-04-10T15:54:09.096575+01:00 - input args["target/debug/comp_profiler", "10", "buff", "10", "10"]
+2025-04-10T15:54:09.128879+01:00 - original size:800000
+2025-04-10T15:54:09.128934+01:00 - compressed size:100020
+2025-04-10T15:54:47.033555+01:00 - input args["target/debug/comp_profiler", "10", "buff", "10", "10"]
+2025-04-10T15:54:47.244996+01:00 - original size:8000000
+2025-04-10T15:54:47.245064+01:00 - compressed size:1000020

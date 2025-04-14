@@ -1,4 +1,4 @@
-use crate::client::construct_file_iterator_skip_newline;
+// use crate::client::construct_file_iterator_skip_newline;
 use crate::methods::compress::SCALE;
 use crate::segment::Segment;
 use std::time::{SystemTime, Instant};
@@ -76,7 +76,7 @@ pub fn outlier_byte_majority_encoding_decoding(vec_u8:Vec<u8>, size:u64, ratio:f
     }
 
     let test_file = "outlier_gen";
-    let mut seg = Segment::new(None,SystemTime::now(),0,file_vec.clone(),None,None);
+    let mut seg = Segment::new_segment(None,SystemTime::now(),0,file_vec.clone(),None,None);
     let org_size = seg.get_byte_size().unwrap();
     let comp = SplitBDDoubleCompress::new(10,10,scl);
     let start1 = Instant::now();
@@ -136,7 +136,7 @@ pub fn outlier_byteall_encoding_decoding(vec_u8:Vec<u8>, size:u64, ratio:f64, sc
     }
 
     let test_file = "outlier_gen";
-    let mut seg = Segment::new(None,SystemTime::now(),0,file_vec.clone(),None,None);
+    let mut seg = Segment::new_segment(None,SystemTime::now(),0,file_vec.clone(),None,None);
     let org_size = seg.get_byte_size().unwrap();
     let comp = SplitBDDoubleCompress::new(10,10,scl);
     let start1 = Instant::now();

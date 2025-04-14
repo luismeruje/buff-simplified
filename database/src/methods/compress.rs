@@ -1,16 +1,16 @@
-use crate::segment::{Segment, PAACompress, FourierCompress, fourier_compress, paa_compress};
+//use crate::segment::{Segment, PAACompress, FourierCompress, fourier_compress, paa_compress};
 
 extern crate flate2;
-extern crate tsz;
+// extern crate tsz;
 use log::{info, trace, warn};
 
 extern crate bitpacking;
 use bitpacking::{BitPacker4x, BitPacker};
 use std::vec::Vec;
 use croaring::Bitmap;
-use tsz::{DataPoint,StdEncoder, StdDecoder};
-use tsz::stream::{BufferedReader, BufferedWriter};
-use tsz::decode::Error;
+// use tsz::{DataPoint,StdEncoder, StdDecoder};
+// use tsz::stream::{BufferedReader, BufferedWriter};
+// use tsz::decode::Error;
 use flate2::read::GzDecoder;
 use flate2::write::GzEncoder;
 use flate2::Compression;
@@ -20,10 +20,10 @@ use flate2::write::ZlibEncoder;
 use serde::{Serialize, Deserialize};
 use self::flate2::read::{ZlibDecoder, DeflateDecoder};
 use self::flate2::write::DeflateEncoder;
-use parity_snappy as snappy;
-use parity_snappy::{compress, decompress};
+// use parity_snappy as snappy;
+// use parity_snappy::{compress, decompress};
 use std::time::{SystemTime, Instant};
-use crate::client::{construct_file_client_skip_newline, construct_file_iterator_skip_newline, construct_file_iterator_int, construct_file_iterator_int_signed};
+// use crate::client::{construct_file_client_skip_newline, construct_file_iterator_skip_newline, construct_file_iterator_int, construct_file_iterator_int_signed};
 use self::bitpacking::BitPacker1x;
 use std::str::FromStr;
 use num::{FromPrimitive, Num, Float};
@@ -38,7 +38,7 @@ use crate::compress::split_double::SplitBDDoubleCompress;
 use std::path::Path;
 use std::fmt::Debug;
 use crate::compress::PRECISION_MAP;
-use self::tsz::{Encode, Decode};
+//use self::tsz::{Encode, Decode};
 use std::slice::Iter;
 use my_bit_vec::BitVec;
 
@@ -58,7 +58,7 @@ pub trait CompressionMethod<T> {
 
 	fn get_batch(&self) -> usize;
 
-    fn run_compress<'a>(&self, segs: &mut Vec<Segment<T>>);
+    // fn run_compress<'a>(&self, segs: &mut Vec<Segment<T>>);
 
-	fn run_decompress(&self, segs: &mut Vec<Segment<T>>);
+	// fn run_decompress(&self, segs: &mut Vec<Segment<T>>);
 }

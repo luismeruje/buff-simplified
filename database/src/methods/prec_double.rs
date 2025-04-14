@@ -1,19 +1,22 @@
 use log::{warn,info};
 use std::mem;
 use crate::methods::bit_packing::BitPack;
-use crate::client::construct_file_iterator_skip_newline;
+// use crate::client::construct_file_iterator_skip_newline;
 use std::time::{SystemTime, Instant};
-use crate::segment::Segment;
+// use crate::segment::Segment;
 use std::fs::File;
 use std::io::{LineWriter, Write};
 use croaring::Bitmap;
-use rust_decimal::prelude::*;
-use histogram::Histogram;
+//use rust_decimal::prelude::*;
+// use histogram::Histogram;
 
 /// END_MARKER is a special bit sequence used to indicate the end of the stream
 pub const EXP_MASK: u64 = 0b0111111111110000000000000000000000000000000000000000000000000000;
 pub const FIRST_ONE: u64 = 0b1000000000000000000000000000000000000000000000000000000000000000;
 pub const NEG_ONE: u64 = 0b1111111111111111111111111111111111111111111111111111111111111111;
+
+//From outlier crate, to avoid having to compile it:
+pub const MAJOR:f32 = 69.0;
 
 pub struct PrecisionBound {
     position: u64,
@@ -403,118 +406,118 @@ fn test_precision_bounded_double() {
 }
 
 
-#[test]
-fn run_benchmark_operations() {
+// #[test]
+// fn run_benchmark_operations() {
 
-    let file_iter = construct_file_iterator_skip_newline::<f64>("../UCRArchive2018/Kernel/randomwalkdatasample1k-40k", 1, ',');
-    let file_vec: Vec<f64> = file_iter.unwrap().collect();
-    let mut seg = Segment::new(None,SystemTime::now(),0,file_vec.clone(),None,None);
-    let mut cur = 0f64;
-    let mut scl = 100000f64;
-    let mut sum  = 0.0;
-    let start = Instant::now();
-    // let minValue = *(seg.get_data().iter().min().unwrap());
-    // let maxValue = *(seg.get_data().iter().max().unwrap());
-    for x in 0..10 {
-        for item in seg.get_data(){
-            cur = (*item)* scl;
-            sum += cur;
-        }
-    }
-    let duration = start.elapsed();
-    // println!("min:{}, max:{}", minValue,maxValue);
-    println!("Time elapsed in multiply 400 million f64 is: {:?}", duration);
-    println!("multiply and sum: {}", sum);
+//     let file_iter = construct_file_iterator_skip_newline::<f64>("../UCRArchive2018/Kernel/randomwalkdatasample1k-40k", 1, ',');
+//     let file_vec: Vec<f64> = file_iter.unwrap().collect();
+//     let mut seg = Segment::new(None,SystemTime::now(),0,file_vec.clone(),None,None);
+//     let mut cur = 0f64;
+//     let mut scl = 100000f64;
+//     let mut sum  = 0.0;
+//     let start = Instant::now();
+//     // let minValue = *(seg.get_data().iter().min().unwrap());
+//     // let maxValue = *(seg.get_data().iter().max().unwrap());
+//     for x in 0..10 {
+//         for item in seg.get_data(){
+//             cur = (*item)* scl;
+//             sum += cur;
+//         }
+//     }
+//     let duration = start.elapsed();
+//     // println!("min:{}, max:{}", minValue,maxValue);
+//     println!("Time elapsed in multiply 400 million f64 is: {:?}", duration);
+//     println!("multiply and sum: {}", sum);
 
-    sum = 0.0;
+//     sum = 0.0;
 
-    let start0 = Instant::now();
-    for x in 0..10 {
-        for item in seg.get_data(){
-            cur = (*item)/ scl;
-            sum += cur;
-        }
-    }
-    let duration0 = start0.elapsed();
-    println!("Time elapsed in divede 400 million f64 is: {:?}", duration0);
-    println!("division and sum: {}", sum);
-    sum = 0.0;
+//     let start0 = Instant::now();
+//     for x in 0..10 {
+//         for item in seg.get_data(){
+//             cur = (*item)/ scl;
+//             sum += cur;
+//         }
+//     }
+//     let duration0 = start0.elapsed();
+//     println!("Time elapsed in divede 400 million f64 is: {:?}", duration0);
+//     println!("division and sum: {}", sum);
+//     sum = 0.0;
 
-    let start1 = Instant::now();
-    for x in 0..10 {
-        for item in seg.get_data(){
-            cur += (*item)- scl;
-            sum += cur;
-        }
-    }
-    let duration1 = start1.elapsed();
-    println!("Time elapsed in sub 400 million f64 is: {:?}", duration1);
-    println!("subtraction and sum: {}", sum);
-    sum = 0.0;
+//     let start1 = Instant::now();
+//     for x in 0..10 {
+//         for item in seg.get_data(){
+//             cur += (*item)- scl;
+//             sum += cur;
+//         }
+//     }
+//     let duration1 = start1.elapsed();
+//     println!("Time elapsed in sub 400 million f64 is: {:?}", duration1);
+//     println!("subtraction and sum: {}", sum);
+//     sum = 0.0;
 
-    let start2 = Instant::now();
-    for x in 0..10 {
-        for item in seg.get_data(){
-            cur = (*item)+ scl;
-            sum += cur;
-        }
-    }
-    let duration2 = start2.elapsed();
-    println!("Time elapsed in add 400 million f64 is: {:?}", duration2);
-    println!("addition and sum: {}", sum);
-    sum = 0.0;
+//     let start2 = Instant::now();
+//     for x in 0..10 {
+//         for item in seg.get_data(){
+//             cur = (*item)+ scl;
+//             sum += cur;
+//         }
+//     }
+//     let duration2 = start2.elapsed();
+//     println!("Time elapsed in add 400 million f64 is: {:?}", duration2);
+//     println!("addition and sum: {}", sum);
+//     sum = 0.0;
 
-    let start3 = Instant::now();
-    let mut curu = 0u64;
-    for x in 0..10 {
-        for item in seg.get_data(){
-            curu = unsafe { mem::transmute::<f64, u64>(*item) };
-            curu = curu>>1;
-            // curu = curu|EXP_MASK;
-            curu = curu|1024u64;
-            curu = curu<<1;
-            sum += unsafe { mem::transmute::<u64, f64>(curu) };
-        }
-    }
-    let duration3 = start3.elapsed();
-    println!("Time elapsed in converse and right shift 400 million f64 is: {:?}", duration3);
-    println!("bitopts and sum: {}", sum);
-}
+//     let start3 = Instant::now();
+//     let mut curu = 0u64;
+//     for x in 0..10 {
+//         for item in seg.get_data(){
+//             curu = unsafe { mem::transmute::<f64, u64>(*item) };
+//             curu = curu>>1;
+//             // curu = curu|EXP_MASK;
+//             curu = curu|1024u64;
+//             curu = curu<<1;
+//             sum += unsafe { mem::transmute::<u64, f64>(curu) };
+//         }
+//     }
+//     let duration3 = start3.elapsed();
+//     println!("Time elapsed in converse and right shift 400 million f64 is: {:?}", duration3);
+//     println!("bitopts and sum: {}", sum);
+// }
 
-#[test]
-fn test_getlength4decimal() {
-    let int_part = 2f64;
-    let mut cur = 0f64;
-    let err = 0.00000000005f64;
-    println!("err:{}", err);
-    let file = File::create("test_configs/precision.csv").unwrap();
-    let mut file = LineWriter::new(file);
+// #[test]
+// fn test_getlength4decimal() {
+//     let int_part = 2f64;
+//     let mut cur = 0f64;
+//     let err = 0.00000000005f64;
+//     println!("err:{}", err);
+//     let file = File::create("test_configs/precision.csv").unwrap();
+//     let mut file = LineWriter::new(file);
 
-    for precision in 1..16{
-        let mut str = String::from("0.");
-        for pos in 0..precision{
-            str.push('0');
-        }
-        str.push_str("49");
-        let error = str.parse().unwrap();
-        let div = 10i64.pow(precision);
-        //let error = (0.5f64/div as f64).abs();
-        let mut bound = PrecisionBound::new(error);
-        for num in 1i64..div{
-            let mut str_cur = String::from("0.");
-            str_cur.push_str(format!("{:0width$}", num, width = precision as usize).as_ref());
-            // cur = int_part+num as f64/div as f64;
-            cur = str_cur.parse().unwrap();
-            let v = bound.precision_bound(cur+int_part);
-            // println!("{}th for precision:{}, cur:{}->v:{}", num,precision, cur, v);
-            bound.cal_length(v);
-        }
-        let (int_len,dec_len) = bound.get_length();
-        println!("length for integer part:{}, decimal part:{} to save {} position of decimal with error;{}", int_len,dec_len,precision,error);
-        file.write_all(format!("{},{}\n", precision, dec_len).as_ref());
-    }
-    file.flush();
-}
+//     for precision in 1..16{
+//         let mut str = String::from("0.");
+//         for pos in 0..precision{
+//             str.push('0');
+//         }
+//         str.push_str("49");
+//         let error = str.parse().unwrap();
+//         let div = 10i64.pow(precision);
+//         //let error = (0.5f64/div as f64).abs();
+//         let mut bound = PrecisionBound::new(error);
+//         for num in 1i64..div{
+//             let mut str_cur = String::from("0.");
+//             str_cur.push_str(format!("{:0width$}", num, width = precision as usize).as_ref());
+//             // cur = int_part+num as f64/div as f64;
+//             cur = str_cur.parse().unwrap();
+//             let v = bound.precision_bound(cur+int_part);
+//             // println!("{}th for precision:{}, cur:{}->v:{}", num,precision, cur, v);
+//             bound.cal_length(v);
+//         }
+//         let (int_len,dec_len) = bound.get_length();
+//         println!("length for integer part:{}, decimal part:{} to save {} position of decimal with error;{}", int_len,dec_len,precision,error);
+//         file.write_all(format!("{},{}\n", precision, dec_len).as_ref());
+//     }
+//     file.flush();
+// }
 
 
 
@@ -607,65 +610,65 @@ fn test_decimal() {
     println!("example: {}",example.to_string());
 }
 
-#[test]
-fn test_varible_length_hist() {
-    let file_iter = construct_file_iterator_skip_newline::<f64>("../UCRArchive2018/Kernel/randomwalkdatasample1k-40k", 0, ',');
-    let file_vec: Vec<f64> = file_iter.unwrap().collect();
-    let clone_vec = file_vec.clone();
-    let mut histogram = Histogram::new();
-    let mut dec_hist = Histogram::new();
+// #[test]
+// fn test_varible_length_hist() {
+//     let file_iter = construct_file_iterator_skip_newline::<f64>("../UCRArchive2018/Kernel/randomwalkdatasample1k-40k", 0, ',');
+//     let file_vec: Vec<f64> = file_iter.unwrap().collect();
+//     let clone_vec = file_vec.clone();
+//     let mut histogram = Histogram::new();
+//     let mut dec_hist = Histogram::new();
 
-    let mut bound = PrecisionBound::new(0.0000005);
-    let start = Instant::now();
-    for val in file_vec{
+//     let mut bound = PrecisionBound::new(0.0000005);
+//     let start = Instant::now();
+//     for val in file_vec{
 
-        let bd = bound.precision_bound(val);
-        bound.cal_length(bd);
-        histogram.increment(bound.get_length().1);
+//         let bd = bound.precision_bound(val);
+//         bound.cal_length(bd);
+//         histogram.increment(bound.get_length().1);
 
-    }
-    let duration = start.elapsed();
-    println!("Time elapsed in cal_length is: {:?}", duration);
-    // print percentiles from the histogram
-    println!("Percentiles: p50: {} ns p90: {} ns p99: {} ns p999: {}",
-             histogram.percentile(50.0).unwrap(),
-             histogram.percentile(90.0).unwrap(),
-             histogram.percentile(99.0).unwrap(),
-             histogram.percentile(99.9).unwrap(),
-    );
+//     }
+//     let duration = start.elapsed();
+//     println!("Time elapsed in cal_length is: {:?}", duration);
+//     // print percentiles from the histogram
+//     println!("Percentiles: p50: {} ns p90: {} ns p99: {} ns p999: {}",
+//              histogram.percentile(50.0).unwrap(),
+//              histogram.percentile(90.0).unwrap(),
+//              histogram.percentile(99.0).unwrap(),
+//              histogram.percentile(99.9).unwrap(),
+//     );
 
-    println!("Latency (ns): Min: {} Avg: {} Max: {} StdDev: {}",
-             histogram.minimum().unwrap(),
-             histogram.mean().unwrap(),
-             histogram.maximum().unwrap(),
-             histogram.stddev().unwrap(),
-    );
+//     println!("Latency (ns): Min: {} Avg: {} Max: {} StdDev: {}",
+//              histogram.minimum().unwrap(),
+//              histogram.mean().unwrap(),
+//              histogram.maximum().unwrap(),
+//              histogram.stddev().unwrap(),
+//     );
 
-    let start = Instant::now();
-    for val in clone_vec{
-        let cur_str = val.to_string();
-        let string:  Vec<&str> = cur_str.split('.').collect();
-        if string.len()>1{
-            dec_hist.increment(string.get(1).unwrap().len() as u64);
-        }
-        else { dec_hist.increment(0); }
-    }
-    let duration = start.elapsed();
-    println!("Time elapsed in checking bits is: {:?}", duration);
+//     let start = Instant::now();
+//     for val in clone_vec{
+//         let cur_str = val.to_string();
+//         let string:  Vec<&str> = cur_str.split('.').collect();
+//         if string.len()>1{
+//             dec_hist.increment(string.get(1).unwrap().len() as u64);
+//         }
+//         else { dec_hist.increment(0); }
+//     }
+//     let duration = start.elapsed();
+//     println!("Time elapsed in checking bits is: {:?}", duration);
 
-    println!("Percentiles: p10: {} ns p15: {} ns p50: {} ns p90: {}",
-             dec_hist.percentile(10.0).unwrap(),
-             dec_hist.percentile(15.0).unwrap(),
-             dec_hist.percentile(50.0).unwrap(),
-             dec_hist.percentile(90.0).unwrap(),
-    );
+//     println!("Percentiles: p10: {} ns p15: {} ns p50: {} ns p90: {}",
+//              dec_hist.percentile(10.0).unwrap(),
+//              dec_hist.percentile(15.0).unwrap(),
+//              dec_hist.percentile(50.0).unwrap(),
+//              dec_hist.percentile(90.0).unwrap(),
+//     );
 
-    println!("Latency (ns): Min: {} Avg: {} Max: {} StdDev: {}",
-             dec_hist.minimum().unwrap(),
-             dec_hist.mean().unwrap(),
-             dec_hist.maximum().unwrap(),
-             dec_hist.stddev().unwrap(),
-    );
+//     println!("Latency (ns): Min: {} Avg: {} Max: {} StdDev: {}",
+//              dec_hist.minimum().unwrap(),
+//              dec_hist.mean().unwrap(),
+//              dec_hist.maximum().unwrap(),
+//              dec_hist.stddev().unwrap(),
+//     );
 
 
-}
+// }

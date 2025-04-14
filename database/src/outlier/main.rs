@@ -4,7 +4,7 @@ use buff::outlier::{gen_u8_with_outlier, outlier_byteall_encoding_decoding, outl
 use log::{info};
 
 fn main() {
-    log4rs::init_file("config/log4rs.yaml", Default::default()).unwrap();
+    // log4rs::init_file("config/log4rs.yaml", Default::default()).unwrap();
 
 
     let args: Vec<String> = env::args().collect();

@@ -1,0 +1,5 @@
+Needs CLang 14 for RocksDB dependency.
+
+Cannot get this to even compile to a size that would fit the MCU.
+
+Would need to use no_std environment.  

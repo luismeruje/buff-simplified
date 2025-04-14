@@ -1,13 +1,13 @@
 use bitpacking::{BitPacker4x};
 use log::{info, trace, warn};
-use futures::future::err;
+// use futures::future::err;
 use num::Num;
 use std::mem;
-use crate::client::construct_file_iterator_skip_newline;
+// use crate::client::construct_file_iterator_skip_newline;
 use std::fmt::Debug;
 use serde::{Serialize, Deserialize};
 use std::time::{SystemTime, Instant};
-use crate::segment::Segment;
+// use crate::segment::Segment;
 use std::any::Any;
 
 pub const MAX_BITS: usize = 32;
@@ -880,23 +880,23 @@ fn test_to_bytes(){
     println!("{:?}" , bytes);
 }
 
-#[test]
-fn test_xor_on_file() {
-    let file_iter = construct_file_iterator_skip_newline::<f64>("../UCRArchive2018/Kernel/randomwalkdatasample1k-10k", 1, ',');
-    let ve: Vec<f64> = file_iter.unwrap().collect();
-    let input = &ve[..20];
-    let mut pre = 0u64;
-    let mut cur = 0u64;
-    let a = 0u64;
-    let b = 1u64;
-    let x_or = a ^ b;
-    println!("{:#066b}^{:#066b}={:#066b}", a, b, x_or);
-    for &ele in input{
-        cur = unsafe { mem::transmute::<f64, u64>(ele) };
-        let xor = cur ^ pre;
-        println!("{:#066b}  XOR", xor);
-        println!("{:#066b}  {}", cur,ele);
-        pre = cur;
+// #[test]
+// fn test_xor_on_file() {
+//     let file_iter = construct_file_iterator_skip_newline::<f64>("../UCRArchive2018/Kernel/randomwalkdatasample1k-10k", 1, ',');
+//     let ve: Vec<f64> = file_iter.unwrap().collect();
+//     let input = &ve[..20];
+//     let mut pre = 0u64;
+//     let mut cur = 0u64;
+//     let a = 0u64;
+//     let b = 1u64;
+//     let x_or = a ^ b;
+//     println!("{:#066b}^{:#066b}={:#066b}", a, b, x_or);
+//     for &ele in input{
+//         cur = unsafe { mem::transmute::<f64, u64>(ele) };
+//         let xor = cur ^ pre;
+//         println!("{:#066b}  XOR", xor);
+//         println!("{:#066b}  {}", cur,ele);
+//         pre = cur;
 
-    }
-}
+//     }
+// }
